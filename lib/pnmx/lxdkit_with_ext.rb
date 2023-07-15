@@ -3,7 +3,7 @@ require "lxdkit/dsl"
 require "active_support/core_ext/hash/deep_merge"
 require "json"
 
-class SSHKit::Backend::Abstract
+class LXDKit::Backend::Abstract
   def capture_with_info(*args, **kwargs)
     capture(*args, **kwargs, verbosity: Logger::INFO)
   end
@@ -41,7 +41,7 @@ class SSHKit::Backend::Abstract
     # Destructure options to pluck out env for merge
     def build_command(args, env: nil, **options)
       # Rely on native Ruby kwargs precedence rather than explicit Hash merges
-      SSHKit::Command.new(*args, **default_command_options, **options, env: env_for(env))
+      LXDKit::Command.new(*args, **default_command_options, **options, env: env_for(env))
     end
 
     def default_command_options

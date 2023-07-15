@@ -11,14 +11,14 @@ require "pnmx"
 ActiveSupport::LogSubscriber.logger = ActiveSupport::Logger.new(STDOUT) if ENV["VERBOSE"]
 
 # Applies to remote commands only.
-SSHKit.config.backend = SSHKit::Backend::Printer
+LXDKit.config.backend = LXDKit::Backend::Printer
 
 # Ensure local commands use the printer backend too.
 # See https://github.com/capistrano/sshkit/blob/master/lib/lxdkit/dsl.rb#L9
-module SSHKit
+module LXDKit
   module DSL
     def run_locally(&block)
-      SSHKit::Backend::Printer.new(SSHKit::Host.new(:local), &block).run
+      LXDKit::Backend::Printer.new(LXDKit::Host.new(:local), &block).run
     end
   end
 end

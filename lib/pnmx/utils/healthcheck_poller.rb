@@ -33,7 +33,7 @@ class Pnmx::Utils::HealthcheckPoller
 
     private
       def info(message)
-        SSHKit.config.output.info(message)
+        LXDKit.config.output.info(message)
       end
   end
 end

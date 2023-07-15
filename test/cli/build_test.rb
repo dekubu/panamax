@@ -21,12 +21,12 @@ class CliBuildTest < CliTestCase
 
   test "push without builder" do
     stub_locking
-    SSHKit::Backend::Abstract.any_instance.stubs(:execute)
+    LXDKit::Backend::Abstract.any_instance.stubs(:execute)
       .with(:docker, "--version", "&&", :docker, :buildx, "version")
 
-    SSHKit::Backend::Abstract.any_instance.stubs(:execute)
+    LXDKit::Backend::Abstract.any_instance.stubs(:execute)
       .with { |*args| args[0..1] == [:docker, :buildx] }
-      .raises(SSHKit::Command::Failed.new("no builder"))
+      .raises(LXDKit::Command::Failed.new("no builder"))
       .then
       .returns(true)
 
@@ -37,9 +37,9 @@ class CliBuildTest < CliTestCase
 
   test "push with no buildx plugin" do
     stub_locking
-    SSHKit::Backend::Abstract.any_instance.stubs(:execute)
+    LXDKit::Backend::Abstract.any_instance.stubs(:execute)
       .with(:docker, "--version", "&&", :docker, :buildx, "version")
-      .raises(SSHKit::Command::Failed.new("no buildx"))
+      .raises(LXDKit::Command::Failed.new("no buildx"))
 
     Pnmx::Commands::Builder.any_instance.stubs(:native_and_local?).returns(false)
     assert_raises(Pnmx::Cli::Build::BuildError) { run_command("push") }
@@ -68,9 +68,9 @@ class CliBuildTest < CliTestCase
 
   test "create with error" do
     stub_locking
-    SSHKit::Backend::Abstract.any_instance.stubs(:execute)
+    LXDKit::Backend::Abstract.any_instance.stubs(:execute)
       .with { |arg| arg == :docker }
-      .raises(SSHKit::Command::Failed.new("stderr=error"))
+      .raises(LXDKit::Command::Failed.new("stderr=error"))
 
     run_command("create").tap do |output|
       assert_match /Couldn't create remote builder: error/, output
@@ -84,7 +84,7 @@ class CliBuildTest < CliTestCase
   end
 
   test "details" do
-    SSHKit::Backend::Abstract.any_instance.stubs(:capture)
+    LXDKit::Backend::Abstract.any_instance.stubs(:capture)
       .with(:docker, :context, :ls, "&&", :docker, :buildx, :ls)
       .returns("docker builder info")
 
@@ -100,9 +100,9 @@ class CliBuildTest < CliTestCase
     end
 
     def stub_dependency_checks
-      SSHKit::Backend::Abstract.any_instance.stubs(:execute)
+      LXDKit::Backend::Abstract.any_instance.stubs(:execute)
         .with(:docker, "--version", "&&", :docker, :buildx, "version")
-      SSHKit::Backend::Abstract.any_instance.stubs(:execute)
+      LXDKit::Backend::Abstract.any_instance.stubs(:execute)
         .with { |*args| args[0..1] == [:docker, :buildx] }
     end
 end

@@ -20,7 +20,7 @@ class Pnmx::Cli::Build < Pnmx::Cli::Base
       run_locally do
         begin
           PNMX.with_verbosity(:debug) { execute *PNMX.builder.push }
-        rescue SSHKit::Command::Failed => e
+        rescue LXDKit::Command::Failed => e
           if e.message =~ /(no builder)|(no such file or directory)/
             error "Missing compatible builder, so creating a new one first"
 
@@ -53,7 +53,7 @@ class Pnmx::Cli::Build < Pnmx::Cli::Base
         begin
           debug "Using builder: #{PNMX.builder.name}"
           execute *PNMX.builder.create
-        rescue SSHKit::Command::Failed => e
+        rescue LXDKit::Command::Failed => e
           if e.message =~ /stderr=(.*)/
             error "Couldn't create remote builder: #{$1}"
             false
@@ -88,7 +88,7 @@ class Pnmx::Cli::Build < Pnmx::Cli::Base
       run_locally do
         begin
           execute *PNMX.builder.ensure_local_dependencies_installed
-        rescue SSHKit::Command::Failed => e
+        rescue LXDKit::Command::Failed => e
           build_error = e.message =~ /command not found/ ?
             "Docker is not installed locally" :
             "Docker buildx plugin is not installed locally"

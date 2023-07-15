@@ -7,7 +7,7 @@ require "pnmx"
 
 begin
   Pnmx::Cli::Main.start(ARGV)
-rescue SSHKit::Runner::ExecuteError => e
+rescue LXDKit::Runner::ExecuteError => e
   puts "  \e[31mERROR (#{e.cause.class}): #{e.message}\e[0m"
   puts e.cause.backtrace if ENV["VERBOSE"]
   exit 1

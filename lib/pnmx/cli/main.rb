@@ -231,7 +231,7 @@ class Pnmx::Cli::Main < Pnmx::Cli::Base
             raise "Container not found" unless container_id.present?
           end
         end
-      rescue SSHKit::Runner::ExecuteError => e
+      rescue LXDKit::Runner::ExecuteError => e
         if e.message =~ /Container not found/
           say "Error looking for container version #{version}: #{e.message}"
           return false

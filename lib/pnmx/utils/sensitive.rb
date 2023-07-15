@@ -1,7 +1,7 @@
 require "active_support/core_ext/module/delegation"
 
 class Pnmx::Utils::Sensitive
-  # So SSHKit knows to redact these values.
+  # So LXDKit knows to redact these values.
   include LXDKit::Redaction
 
   attr_reader :unredacted, :redaction

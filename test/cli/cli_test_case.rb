@@ -20,17 +20,17 @@ class CliTestCase < ActiveSupport::TestCase
       @executions = []
       Pnmx::Commands::Hook.any_instance.stubs(:hook_exists?).returns(true)
 
-      SSHKit::Backend::Abstract.any_instance.stubs(:execute)
+      LXDKit::Backend::Abstract.any_instance.stubs(:execute)
         .with { |*args| @executions << args; args != [".pnmx/hooks/#{hook}"] }
-      SSHKit::Backend::Abstract.any_instance.stubs(:execute)
+      LXDKit::Backend::Abstract.any_instance.stubs(:execute)
         .with { |*args| args.first == ".pnmx/hooks/#{hook}" }
-        .raises(SSHKit::Command::Failed.new("failed"))
+        .raises(LXDKit::Command::Failed.new("failed"))
     end
 
     def stub_locking
-      SSHKit::Backend::Abstract.any_instance.stubs(:execute)
+      LXDKit::Backend::Abstract.any_instance.stubs(:execute)
         .with { |arg1, arg2| arg1 == :mkdir && arg2 == :pnmx_lock }
-      SSHKit::Backend::Abstract.any_instance.stubs(:execute)
+      LXDKit::Backend::Abstract.any_instance.stubs(:execute)
         .with { |arg1, arg2| arg1 == :rm && arg2 == "pnmx_lock/details" }
     end
 

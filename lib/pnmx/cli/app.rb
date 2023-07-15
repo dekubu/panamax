@@ -192,7 +192,7 @@ class Pnmx::Cli::App < Pnmx::Cli::Base
         roles.each do |role|
           begin
             puts_by_host host, capture_with_info(*PNMX.app(role: role).logs(since: since, lines: lines, grep: grep))
-          rescue SSHKit::Command::Failed
+          rescue LXDKit::Command::Failed
             puts_by_host host, "Nothing found"
           end
         end

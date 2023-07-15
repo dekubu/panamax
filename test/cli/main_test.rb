@@ -62,11 +62,11 @@ class CliMainTest < CliTestCase
   test "deploy when locked" do
     Thread.report_on_exception = false
 
-    SSHKit::Backend::Abstract.any_instance.stubs(:execute)
+    LXDKit::Backend::Abstract.any_instance.stubs(:execute)
       .with { |*arg| arg[0..1] == [:mkdir, :pnmx_lock] }
       .raises(RuntimeError, "mkdir: cannot create directory ‘pnmx_lock’: File exists")
 
-    SSHKit::Backend::Abstract.any_instance.expects(:capture_with_debug)
+    LXDKit::Backend::Abstract.any_instance.expects(:capture_with_debug)
       .with(:stat, :pnmx_lock, ">", "/dev/null", "&&", :cat, "pnmx_lock/details", "|", :base64, "-d")
 
     assert_raises(Pnmx::Cli::LockError) do
@@ -77,11 +77,11 @@ class CliMainTest < CliTestCase
   test "deploy error when locking" do
     Thread.report_on_exception = false
 
-    SSHKit::Backend::Abstract.any_instance.stubs(:execute)
+    LXDKit::Backend::Abstract.any_instance.stubs(:execute)
       .with { |*arg| arg[0..1] == [:mkdir, :pnmx_lock] }
       .raises(SocketError, "getaddrinfo: nodename nor servname provided, or not known")
 
-    assert_raises(SSHKit::Runner::ExecuteError) do
+    assert_raises(LXDKit::Runner::ExecuteError) do
       run_command("deploy")
     end
   end
@@ -171,16 +171,16 @@ class CliMainTest < CliTestCase
 
   test "rollback good version" do
     [ "web", "workers" ].each do |role|
-      SSHKit::Backend::Abstract.any_instance.expects(:capture_with_info)
+      LXDKit::Backend::Abstract.any_instance.expects(:capture_with_info)
         .with(:docker, :container, :ls, "--filter", "name=^app-#{role}-123$", "--quiet", raise_on_non_zero_exit: false)
         .returns("").at_least_once
-      SSHKit::Backend::Abstract.any_instance.expects(:capture_with_info)
+      LXDKit::Backend::Abstract.any_instance.expects(:capture_with_info)
         .with(:docker, :container, :ls, "--all", "--filter", "name=^app-#{role}-123$", "--quiet")
         .returns("version-to-rollback\n").at_least_once
-      SSHKit::Backend::Abstract.any_instance.expects(:capture_with_info)
+      LXDKit::Backend::Abstract.any_instance.expects(:capture_with_info)
         .with(:docker, :ps, "--filter", "label=service=app", "--filter", "label=role=#{role}", "--filter", "status=running", "--filter", "status=restarting", "--latest", "--format", "\"{{.Names}}\"", "|", "grep -oE \"\\-[^-]+$\"", "|", "cut -c 2-", raise_on_non_zero_exit: false)
         .returns("version-to-rollback\n").at_least_once
-      SSHKit::Backend::Abstract.any_instance.expects(:capture_with_info)
+      LXDKit::Backend::Abstract.any_instance.expects(:capture_with_info)
         .with(:docker, :container, :ls, "--all", "--filter", "name=^app-#{role}-123$", "--quiet", "|", :xargs, :docker, :inspect, "--format", "'{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}'")
         .returns("running").at_least_once # health check
     end
@@ -203,13 +203,13 @@ class CliMainTest < CliTestCase
 
     Pnmx::Utils::HealthcheckPoller.stubs(:sleep)
 
-    SSHKit::Backend::Abstract.any_instance.expects(:capture_with_info)
+    LXDKit::Backend::Abstract.any_instance.expects(:capture_with_info)
       .with(:docker, :container, :ls, "--filter", "name=^app-web-123$", "--quiet", raise_on_non_zero_exit: false)
       .returns("").at_least_once
-    SSHKit::Backend::Abstract.any_instance.expects(:capture_with_info)
+    LXDKit::Backend::Abstract.any_instance.expects(:capture_with_info)
       .with(:docker, :ps, "--filter", "label=service=app", "--filter", "label=role=web", "--filter", "status=running", "--filter", "status=restarting", "--latest", "--format", "\"{{.Names}}\"", "|", "grep -oE \"\\-[^-]+$\"", "|", "cut -c 2-", raise_on_non_zero_exit: false)
       .returns("").at_least_once
-    SSHKit::Backend::Abstract.any_instance.expects(:capture_with_info)
+    LXDKit::Backend::Abstract.any_instance.expects(:capture_with_info)
       .with(:docker, :container, :ls, "--all", "--filter", "name=^app-web-123$", "--quiet", "|", :xargs, :docker, :inspect, "--format", "'{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}'")
       .returns("running").at_least_once # health check
 

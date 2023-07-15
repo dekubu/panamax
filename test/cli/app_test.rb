@@ -13,15 +13,15 @@ class CliAppTest < CliTestCase
   test "boot will rename if same version is already running" do
     run_command("details") # Preheat PNMX const
 
-    SSHKit::Backend::Abstract.any_instance.expects(:capture_with_info)
+    LXDKit::Backend::Abstract.any_instance.expects(:capture_with_info)
       .with(:docker, :container, :ls, "--filter", "name=^app-web-latest$", "--quiet", raise_on_non_zero_exit: false)
       .returns("12345678") # running version
 
-    SSHKit::Backend::Abstract.any_instance.expects(:capture_with_info)
+    LXDKit::Backend::Abstract.any_instance.expects(:capture_with_info)
       .with(:docker, :container, :ls, "--all", "--filter", "name=^app-web-latest$", "--quiet", "|", :xargs, :docker, :inspect, "--format", "'{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}'")
       .returns("running") # health check
 
-    SSHKit::Backend::Abstract.any_instance.expects(:capture_with_info)
+    LXDKit::Backend::Abstract.any_instance.expects(:capture_with_info)
       .with(:docker, :ps, "--filter", "label=service=app", "--filter", "label=role=web", "--filter", "status=running", "--filter", "status=restarting", "--latest", "--format", "\"{{.Names}}\"", "|", "grep -oE \"\\-[^-]+$\"", "|", "cut -c 2-", raise_on_non_zero_exit: false)
       .returns("123") # old version
 
@@ -70,7 +70,7 @@ class CliAppTest < CliTestCase
   end
 
   test "stale_containers" do
-    SSHKit::Backend::Abstract.any_instance.expects(:capture_with_info)
+    LXDKit::Backend::Abstract.any_instance.expects(:capture_with_info)
       .with(:docker, :ps, "--filter", "label=service=app", "--filter", "label=role=web", "--format", "\"{{.Names}}\"", "|", "grep -oE \"\\-[^-]+$\"", "|", "cut -c 2-", raise_on_non_zero_exit: false)
       .returns("12345678\n87654321")
 
@@ -80,7 +80,7 @@ class CliAppTest < CliTestCase
   end
 
   test "stop stale_containers" do
-    SSHKit::Backend::Abstract.any_instance.expects(:capture_with_info)
+    LXDKit::Backend::Abstract.any_instance.expects(:capture_with_info)
       .with(:docker, :ps, "--filter", "label=service=app", "--filter", "label=role=web", "--format", "\"{{.Names}}\"", "|", "grep -oE \"\\-[^-]+$\"", "|", "cut -c 2-", raise_on_non_zero_exit: false)
       .returns("12345678\n87654321")
 
@@ -148,14 +148,14 @@ class CliAppTest < CliTestCase
   end
 
   test "logs" do
-    SSHKit::Backend::Abstract.any_instance.stubs(:exec)
+    LXDKit::Backend::Abstract.any_instance.stubs(:exec)
       .with("ssh -t root@1.1.1.1 'docker ps --quiet --filter label=service=app --filter label=role=web --filter status=running --filter status=restarting --latest| xargs docker logs --timestamps --tail 10 2>&1'")
 
     assert_match "docker ps --quiet --filter label=service=app --filter label=role=web --filter status=running --filter status=restarting --latest | xargs docker logs --tail 100 2>&1", run_command("logs")
   end
 
   test "logs with follow" do
-    SSHKit::Backend::Abstract.any_instance.stubs(:exec)
+    LXDKit::Backend::Abstract.any_instance.stubs(:exec)
       .with("ssh -t root@1.1.1.1 'docker ps --quiet --filter label=service=app --filter label=role=web --filter status=running --filter status=restarting --latest | xargs docker logs --timestamps --tail 10 --follow 2>&1'")
 
     assert_match "docker ps --quiet --filter label=service=app --filter label=role=web --filter status=running --filter status=restarting --latest | xargs docker logs --timestamps --tail 10 --follow 2>&1", run_command("logs", "--follow")
@@ -180,9 +180,9 @@ class CliAppTest < CliTestCase
     end
 
     def stub_running
-      SSHKit::Backend::Abstract.any_instance.stubs(:capture_with_info).returns("123") # old version
+      LXDKit::Backend::Abstract.any_instance.stubs(:capture_with_info).returns("123") # old version
 
-      SSHKit::Backend::Abstract.any_instance.expects(:capture_with_info)
+      LXDKit::Backend::Abstract.any_instance.expects(:capture_with_info)
         .with(:docker, :container, :ls, "--all", "--filter", "name=^app-web-latest$", "--quiet", "|", :xargs, :docker, :inspect, "--format", "'{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}'")
         .returns("running") # health check
     end

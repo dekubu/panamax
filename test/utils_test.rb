@@ -7,7 +7,7 @@ class UtilsTest < ActiveSupport::TestCase
   end
 
   test "argumentize with redacted" do
-    assert_kind_of SSHKit::Redaction, \
+    assert_kind_of LXDKit::Redaction, \
       Pnmx::Utils.argumentize("--label", { foo: "bar" }, sensitive: true).last
   end
 
@@ -38,8 +38,8 @@ class UtilsTest < ActiveSupport::TestCase
     assert_equal "[REDACTED]".inspect, Pnmx::Utils.sensitive("secret").inspect
   end
 
-  test "redact from SSHKit output" do
-    assert_kind_of SSHKit::Redaction, Pnmx::Utils.sensitive("secret")
+  test "redact from LXDKit output" do
+    assert_kind_of LXDKit::Redaction, Pnmx::Utils.sensitive("secret")
   end
 
   test "redact from YAML output" do

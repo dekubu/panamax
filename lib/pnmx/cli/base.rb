@@ -114,7 +114,7 @@ module Pnmx::Cli
 
       def raise_if_locked
         yield
-      rescue SSHKit::Runner::ExecuteError => e
+      rescue LXDKit::Runner::ExecuteError => e
         if e.message =~ /cannot create directory/
           on(PNMX.primary_host) { puts capture_with_debug(*PNMX.lock.status) }
           raise LockError, "Deploy lock found"
@@ -140,7 +140,7 @@ module Pnmx::Cli
           say "Running the #{hook} hook...", :magenta
           run_locally do
             PNMX.with_verbosity(:debug) { execute *PNMX.hook.run(hook, **details, **extra_details) }
-          rescue SSHKit::Command::Failed
+          rescue LXDKit::Command::Failed
             raise HookError.new("Hook `#{hook}` failed")
           end
         end

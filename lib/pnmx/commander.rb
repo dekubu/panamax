@@ -124,12 +124,12 @@ class Pnmx::Commander
     old_level = self.verbosity
 
     self.verbosity = level
-    SSHKit.config.output_verbosity = level
+    LXDKit.config.output_verbosity = level
 
     yield
   ensure
     self.verbosity = old_level
-    SSHKit.config.output_verbosity = old_level
+    LXDKit.config.output_verbosity = old_level
   end
 
   def holding_lock?
@@ -141,10 +141,10 @@ class Pnmx::Commander
   end
 
   private
-    # Lazy setup of SSHKit
+    # Lazy setup of LXDKit
     def configure_sshkit_with(config)
-      SSHKit::Backend::Netssh.configure { |ssh| ssh.ssh_options = config.ssh_options }
-      SSHKit.config.command_map[:docker] = "docker" # No need to use /usr/bin/env, just clogs up the logs
-      SSHKit.config.output_verbosity = verbosity
+      LXDKit::Backend::Netssh.configure { |ssh| ssh.ssh_options = config.ssh_options }
+      LXDKit.config.command_map[:docker] = "docker" # No need to use /usr/bin/env, just clogs up the logs
+      LXDKit.config.output_verbosity = verbosity
     end
 end

@@ -27,7 +27,7 @@ class Pnmx::Cli::Lock < Pnmx::Cli::Base
   private
     def handle_missing_lock
       yield
-    rescue SSHKit::Runner::ExecuteError => e
+    rescue LXDKit::Runner::ExecuteError => e
       if e.message =~ /No such file or directory/
         say "There is no deploy lock"
       else

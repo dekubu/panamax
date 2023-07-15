@@ -42,7 +42,7 @@ class CliTraefikTest < CliTestCase
   end
 
   test "logs" do
-    SSHKit::Backend::Abstract.any_instance.stubs(:capture)
+    LXDKit::Backend::Abstract.any_instance.stubs(:capture)
       .with(:docker, :logs, "traefik", " --tail 100", "--timestamps", "2>&1")
       .returns("Log entry")
 
@@ -53,7 +53,7 @@ class CliTraefikTest < CliTestCase
   end
 
   test "logs with follow" do
-    SSHKit::Backend::Abstract.any_instance.stubs(:exec)
+    LXDKit::Backend::Abstract.any_instance.stubs(:exec)
       .with("ssh -t root@1.1.1.1 'docker logs traefik --timestamps --tail 10 --follow 2>&1'")
 
     assert_match "docker logs traefik --timestamps --tail 10 --follow", run_command("logs", "--follow")
