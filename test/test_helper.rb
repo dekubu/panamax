@@ -5,7 +5,7 @@ require "active_support/testing/stream"
 require "debug"
 require "mocha/minitest" # using #stubs that can alter returns
 require "minitest/autorun" # using #stub that take args
-require "sshkit"
+require "lxdkit"
 require "pnmx"
 
 ActiveSupport::LogSubscriber.logger = ActiveSupport::Logger.new(STDOUT) if ENV["VERBOSE"]
@@ -14,7 +14,7 @@ ActiveSupport::LogSubscriber.logger = ActiveSupport::Logger.new(STDOUT) if ENV["
 SSHKit.config.backend = SSHKit::Backend::Printer
 
 # Ensure local commands use the printer backend too.
-# See https://github.com/capistrano/sshkit/blob/master/lib/sshkit/dsl.rb#L9
+# See https://github.com/capistrano/sshkit/blob/master/lib/lxdkit/dsl.rb#L9
 module SSHKit
   module DSL
     def run_locally(&block)

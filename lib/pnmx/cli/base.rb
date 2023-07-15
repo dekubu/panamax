@@ -4,7 +4,7 @@ require "pnmx/sshkit_with_ext"
 
 module Pnmx::Cli
   class Base < Thor
-    include SSHKit::DSL
+    include LXDKit::DSL
 
     def self.exit_on_failure?() true end
 
