@@ -13,7 +13,7 @@ class Pnmx::Commander
   def config
     @config ||= Pnmx::Configuration.create_from(**@config_kwargs).tap do |config|
       @config_kwargs = nil
-      configure_sshkit_with(config)
+      configure_lxdkit_with(config)
     end
   end
 
@@ -142,7 +142,7 @@ class Pnmx::Commander
 
   private
     # Lazy setup of LXDKit
-    def configure_sshkit_with(config)
+    def configure_lxdkit_with(config)
       LXDKit::Backend::Netssh.configure { |ssh| ssh.ssh_options = config.ssh_options }
       LXDKit.config.command_map[:docker] = "docker" # No need to use /usr/bin/env, just clogs up the logs
       LXDKit.config.output_verbosity = verbosity

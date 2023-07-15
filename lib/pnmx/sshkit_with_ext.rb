@@ -1,5 +1,5 @@
-require "sshkit"
-require "sshkit/dsl"
+require "lxdkit"
+require "lxdkit/dsl"
 require "active_support/core_ext/hash/deep_merge"
 require "json"
 

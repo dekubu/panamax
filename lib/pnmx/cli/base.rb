@@ -1,6 +1,6 @@
 require "thor"
 require "dotenv"
-require "pnmx/sshkit_with_ext"
+require "pnmx/lxdkit_with_ext"
 
 module Pnmx::Cli
   class Base < Thor

@@ -14,7 +14,7 @@ ActiveSupport::LogSubscriber.logger = ActiveSupport::Logger.new(STDOUT) if ENV["
 LXDKit.config.backend = LXDKit::Backend::Printer
 
 # Ensure local commands use the printer backend too.
-# See https://github.com/capistrano/sshkit/blob/master/lib/lxdkit/dsl.rb#L9
+# See https://github.com/capistrano/lxdkit/blob/master/lib/lxdkit/dsl.rb#L9
 module LXDKit
   module DSL
     def run_locally(&block)
