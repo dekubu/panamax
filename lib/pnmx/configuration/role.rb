@@ -14,6 +14,9 @@ class Pnmx::Configuration::Role
   def hosts
     @hosts ||= extract_hosts_from_config
   end
+  def containers
+    @containers ||= extract_containers_from_config
+  end
 
   def labels
     default_labels.merge(traefik_labels).merge(custom_labels)
@@ -82,6 +85,15 @@ class Pnmx::Configuration::Role
       else
         servers = config.servers[name]
         servers.is_a?(Array) ? servers : Array(servers["hosts"])
+      end
+    end
+
+    def extract_containers_from_config
+      if config.containers.is_a?(Array)
+        config.containers
+      else
+        containers = config.containers[name]
+        containers.is_a?(Array) ? containers : Array(servers["containers"])
       end
     end
 
