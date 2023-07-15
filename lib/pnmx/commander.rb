@@ -143,7 +143,6 @@ class Pnmx::Commander
   private
     # Lazy setup of LXDKit
     def configure_lxdkit_with(config)
-      LXDKit::Backend::Netssh.configure { |ssh| ssh.ssh_options = config.ssh_options }
       LXDKit.config.command_map[:docker] = "docker" # No need to use /usr/bin/env, just clogs up the logs
       LXDKit.config.output_verbosity = verbosity
     end
