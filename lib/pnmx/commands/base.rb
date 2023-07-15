@@ -12,14 +12,7 @@ module Pnmx::Commands
     end
 
     def run_over_ssh(*command, host:)
-      "ssh".tap do |cmd|
-        if config.ssh_proxy && config.ssh_proxy.is_a?(Net::SSH::Proxy::Jump)
-          cmd << " -J #{config.ssh_proxy.jump_proxies}"
-        elsif config.ssh_proxy && config.ssh_proxy.is_a?(Net::SSH::Proxy::Command)
-          cmd << " -o ProxyCommand='#{config.ssh_proxy.command_line_template}'"
-        end
-        cmd << " -t #{config.ssh_user}@#{host} '#{command.join(" ")}'"
-      end
+      puts "Running #{command} on #{host}"
     end
 
     def container_id_for(container_name:, only_running: false)
