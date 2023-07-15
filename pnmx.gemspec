@@ -14,6 +14,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "activesupport", ">= 7.0"
   spec.add_dependency "sshkit", "~> 1.21"
+  spec.add_dependency "lxdkit", "~> 0.0"
   spec.add_dependency "net-ssh", "~> 7.0"
   spec.add_dependency "thor", "~> 1.2"
   spec.add_dependency "dotenv", "~> 2.8"
