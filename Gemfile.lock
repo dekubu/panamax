@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pnmx (0.0.5)
+    pnmx (0.0.6)
       activesupport (>= 7.0)
       bcrypt_pbkdf (~> 1.0)
       dotenv (~> 2.8)
