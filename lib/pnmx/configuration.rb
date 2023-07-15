@@ -170,7 +170,7 @@ class Pnmx::Configuration
   end
 
   def valid?
-    ensure_required_keys_present && ensure_valid_mrsk_version
+    ensure_required_keys_present && ensure_valid_pnmx_version
   end
 
 
@@ -237,7 +237,7 @@ class Pnmx::Configuration
       true
     end
 
-    def ensure_valid_mrsk_version
+    def ensure_valid_pnmx_version
       if minimum_version && Gem::Version.new(minimum_version) > Gem::Version.new(Pnmx::VERSION)
         raise ArgumentError, "Current version is #{Pnmx::VERSION}, minimum required is #{minimum_version}"
       end

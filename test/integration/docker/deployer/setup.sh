@@ -1,6 +1,6 @@
 #!/bin/bash
 
-install_mrsk() {
+install_pnmx() {
   cd /pnmx && gem build pnmx.gemspec -o /tmp/pnmx.gem && gem install /tmp/pnmx.gem
 }
 
@@ -17,7 +17,7 @@ push_image_to_registry_4443() {
   fi
 }
 
-install_mrsk
+install_pnmx
 push_image_to_registry_4443 nginx 1-alpine-slim
 push_image_to_registry_4443 traefik v2.9
 push_image_to_registry_4443 busybox 1.36.0

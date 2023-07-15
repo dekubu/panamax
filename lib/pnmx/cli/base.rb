@@ -147,7 +147,7 @@ module Pnmx::Cli
       end
 
       def command
-        @mrsk_command ||= begin
+        @pnmx_command ||= begin
           invocation_class, invocation_commands = *first_invocation
           if invocation_class == Pnmx::Cli::Main
             invocation_commands[0]
@@ -158,7 +158,7 @@ module Pnmx::Cli
       end
 
       def subcommand
-        @mrsk_subcommand ||= begin
+        @pnmx_subcommand ||= begin
           invocation_class, invocation_commands = *first_invocation
           invocation_commands[0] if invocation_class != Pnmx::Cli::Main
         end

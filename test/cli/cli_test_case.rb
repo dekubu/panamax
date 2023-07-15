@@ -29,9 +29,9 @@ class CliTestCase < ActiveSupport::TestCase
 
     def stub_locking
       SSHKit::Backend::Abstract.any_instance.stubs(:execute)
-        .with { |arg1, arg2| arg1 == :mkdir && arg2 == :mrsk_lock }
+        .with { |arg1, arg2| arg1 == :mkdir && arg2 == :pnmx_lock }
       SSHKit::Backend::Abstract.any_instance.stubs(:execute)
-        .with { |arg1, arg2| arg1 == :rm && arg2 == "mrsk_lock/details" }
+        .with { |arg1, arg2| arg1 == :rm && arg2 == "pnmx_lock/details" }
     end
 
     def assert_hook_ran(hook, output, version:, service_version:, hosts:, command:, subcommand: nil, runtime: nil)
@@ -41,14 +41,14 @@ class CliTestCase < ActiveSupport::TestCase
 
       expected = %r{Running\s/usr/bin/env\s\.pnmx/hooks/#{hook}\sas\s#{performer}@localhost\n\s
         DEBUG\s\[[0-9a-f]*\]\sCommand:\s\(\sexport\s
-        MRSK_RECORDED_AT=\"\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ\"\s
-        MRSK_PERFORMER=\"#{performer}\"\s
-        MRSK_VERSION=\"#{version}\"\s
-        MRSK_SERVICE_VERSION=\"#{service_version}\"\s
-        MRSK_HOSTS=\"#{hosts}\"\s
-        MRSK_COMMAND=\"#{command}\"\s
-        #{"MRSK_SUBCOMMAND=\\\"#{subcommand}\\\"\\s" if subcommand}
-        #{"MRSK_RUNTIME=\\\"#{runtime}\\\"\\s" if runtime}
+        PNMX_RECORDED_AT=\"\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ\"\s
+        PNMX_PERFORMER=\"#{performer}\"\s
+        PNMX_VERSION=\"#{version}\"\s
+        PNMX_SERVICE_VERSION=\"#{service_version}\"\s
+        PNMX_HOSTS=\"#{hosts}\"\s
+        PNMX_COMMAND=\"#{command}\"\s
+        #{"PNMX_SUBCOMMAND=\\\"#{subcommand}\\\"\\s" if subcommand}
+        #{"PNMX_RUNTIME=\\\"#{runtime}\\\"\\s" if runtime}
         ;\s/usr/bin/env\s\.pnmx/hooks/#{hook} }x
 
       assert_match expected, output

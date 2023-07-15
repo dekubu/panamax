@@ -20,7 +20,7 @@ class Pnmx::Commands::App < Pnmx::Commands::Base
       "--restart unless-stopped",
       "--name", container_name,
       *(["--hostname", hostname] if hostname),
-      "-e", "MRSK_CONTAINER_NAME=\"#{container_name}\"",
+      "-e", "PNMX_CONTAINER_NAME=\"#{container_name}\"",
       *role.env_args,
       *role.health_check_args,
       *config.logging_args,

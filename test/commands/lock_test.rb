@@ -10,19 +10,19 @@ class CommandsLockTest < ActiveSupport::TestCase
 
   test "status" do
     assert_equal \
-      "stat mrsk_lock > /dev/null && cat mrsk_lock/details | base64 -d",
+      "stat pnmx_lock > /dev/null && cat pnmx_lock/details | base64 -d",
       new_command.status.join(" ")
   end
 
   test "acquire" do
     assert_match \
-      /mkdir mrsk_lock && echo ".*" > mrsk_lock\/details/m,
+      /mkdir pnmx_lock && echo ".*" > pnmx_lock\/details/m,
       new_command.acquire("Hello", "123").join(" ")
   end
 
   test "release" do
     assert_match \
-      "rm mrsk_lock/details && rm -r mrsk_lock",
+      "rm pnmx_lock/details && rm -r pnmx_lock",
       new_command.release.join(" ")
   end
 

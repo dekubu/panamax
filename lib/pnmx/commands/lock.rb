@@ -40,7 +40,7 @@ class Pnmx::Commands::Lock < Pnmx::Commands::Base
     end
 
     def lock_dir
-      :mrsk_lock
+      :pnmx_lock
     end
 
     def lock_details_file

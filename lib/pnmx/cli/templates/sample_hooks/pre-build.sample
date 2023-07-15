@@ -9,12 +9,12 @@
 # 4. The version we are deploying matches the remote
 #
 # These environment variables are available:
-# MRSK_RECORDED_AT
-# MRSK_PERFORMER
-# MRSK_VERSION
-# MRSK_HOSTS
-# MRSK_ROLE (if set)
-# MRSK_DESTINATION (if set)
+# PNMX_RECORDED_AT
+# PNMX_PERFORMER
+# PNMX_VERSION
+# PNMX_HOSTS
+# PNMX_ROLE (if set)
+# PNMX_DESTINATION (if set)
 
 if [ -n "$(git status --porcelain)" ]; then
   echo "Git checkout is not clean, aborting..." >&2
@@ -43,8 +43,8 @@ if [ -z "$remote_head" ]; then
   exit 1
 fi
 
-if [ "$MRSK_VERSION" != "$remote_head" ]; then
-  echo "Version ($MRSK_VERSION) does not match remote HEAD ($remote_head), aborting..." >&2
+if [ "$PNMX_VERSION" != "$remote_head" ]; then
+  echo "Version ($PNMX_VERSION) does not match remote HEAD ($remote_head), aborting..." >&2
   exit 1
 fi
 

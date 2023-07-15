@@ -20,25 +20,25 @@ class CommandsRegistryTest < ActiveSupport::TestCase
   end
 
   test "registry login with ENV password" do
-    ENV["MRSK_REGISTRY_PASSWORD"] = "more-secret"
-    @config[:registry]["password"] = [ "MRSK_REGISTRY_PASSWORD" ]
+    ENV["PNMX_REGISTRY_PASSWORD"] = "more-secret"
+    @config[:registry]["password"] = [ "PNMX_REGISTRY_PASSWORD" ]
 
     assert_equal \
       "docker login hub.docker.com -u dhh -p more-secret",
       @registry.login.join(" ")
   ensure
-    ENV.delete("MRSK_REGISTRY_PASSWORD")
+    ENV.delete("PNMX_REGISTRY_PASSWORD")
   end
 
   test "registry login with ENV username" do
-    ENV["MRSK_REGISTRY_USERNAME"] = "also-secret"
-    @config[:registry]["username"] = [ "MRSK_REGISTRY_USERNAME" ]
+    ENV["PNMX_REGISTRY_USERNAME"] = "also-secret"
+    @config[:registry]["username"] = [ "PNMX_REGISTRY_USERNAME" ]
 
     assert_equal \
       "docker login hub.docker.com -u also-secret -p secret",
       @registry.login.join(" ")
   ensure
-    ENV.delete("MRSK_REGISTRY_USERNAME")
+    ENV.delete("PNMX_REGISTRY_USERNAME")
   end
 
   test "registry logout" do

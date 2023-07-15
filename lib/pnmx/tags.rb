@@ -26,7 +26,7 @@ class Pnmx::Tags
   end
 
   def env
-    tags.transform_keys { |detail| "MRSK_#{detail.upcase}" }
+    tags.transform_keys { |detail| "PNMX_#{detail.upcase}" }
   end
 
   def to_s

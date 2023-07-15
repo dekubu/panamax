@@ -9,7 +9,7 @@ class Pnmx::Commands::Healthcheck < Pnmx::Commands::Base
       "--name", container_name_with_version,
       "--publish", "#{EXPOSED_PORT}:#{config.healthcheck["port"]}",
       "--label", "service=#{container_name}",
-      "-e", "MRSK_CONTAINER_NAME=\"#{container_name}\"",
+      "-e", "PNMX_CONTAINER_NAME=\"#{container_name}\"",
       *web.env_args,
       *web.health_check_args,
       *config.volume_args,
