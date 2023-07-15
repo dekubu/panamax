@@ -13,7 +13,6 @@ Gem::Specification.new do |spec|
   spec.executables = %w[ pnmx ]
 
   spec.add_dependency "activesupport", ">= 7.0"
-  spec.add_dependency "lxdkit", "~> 1.21"
   spec.add_dependency "lxdkit", "~> 0.0"
   spec.add_dependency "net-ssh", "~> 7.0"
   spec.add_dependency "thor", "~> 1.2"
