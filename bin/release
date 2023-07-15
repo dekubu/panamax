@@ -4,11 +4,11 @@ VERSION=$1
 
 printf "module Pnmx\n  VERSION = \"$VERSION\"\nend\n" > ./lib/pnmx/version.rb
 bundle
-git add Gemfile.lock lib/pnmx/version.rb
-git commit -m "Bump version for $VERSION"
-git push
-git tag v$VERSION
-git push --tags
+#git add Gemfile.lock lib/pnmx/version.rb
+#git commit -m "Bump version for $VERSION"
+#git push
+#git tag v$VERSION
+#git push --tags
 gem build pnmx.gemspec
-gem push "pnmx-$VERSION.gem" --host https://rubygems.org
-rm "pnmx-$VERSION.gem"
+#gem push "pnmx-$VERSION.gem" --host https://rubygems.org
+#rm "pnmx-$VERSION.gem"
