@@ -12,8 +12,7 @@ module Pnmx::Commands
     end
 
     def run_over_lxd(*command, host:)
-      
-      "lxc exec #{host} -- sh -c".tap do |cmd|
+      output = "lxc exec #{host} -- sh -c".tap do |cmd|
         # if config.ssh_proxy && config.ssh_proxy.is_a?(Net::SSH::Proxy::Jump)
         #   cmd << " -J #{config.ssh_proxy.jump_proxies}"
         # elsif config.ssh_proxy && config.ssh_proxy.is_a?(Net::SSH::Proxy::Command)
@@ -22,6 +21,9 @@ module Pnmx::Commands
         cmd << " '#{command.join(" ")}'"
       end
 
+      puts "Running: #{output}"
+       
+      output
     end
 
     def container_id_for(container_name:, only_running: false)
