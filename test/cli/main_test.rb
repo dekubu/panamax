@@ -93,11 +93,11 @@ class CliMainTest < CliTestCase
       .with("pnmx:cli:registry:login", [], invoke_options)
       .raises(RuntimeError)
 
-    assert !MRSK.holding_lock?
+    assert !PNMX.holding_lock?
     assert_raises(RuntimeError) do
       stderred { run_command("deploy") }
     end
-    assert !MRSK.holding_lock?
+    assert !PNMX.holding_lock?
   end
 
   test "deploy with skipped hooks" do
@@ -161,7 +161,7 @@ class CliMainTest < CliTestCase
   test "rollback bad version" do
     Thread.report_on_exception = false
 
-    run_command("details") # Preheat MRSK const
+    run_command("details") # Preheat PNMX const
 
     run_command("rollback", "nonsense").tap do |output|
       assert_match /docker container ls --all --filter name=\^app-web-nonsense\$ --quiet/, output
@@ -305,7 +305,7 @@ class CliMainTest < CliTestCase
     run_command("init", "--bundle").tap do |output|
       assert_match /Created configuration file in config\/deploy.yml/, output
       assert_match /Created \.env file/, output
-      assert_match /Adding MRSK to Gemfile and bundle/, output
+      assert_match /Adding PNMX to Gemfile and bundle/, output
       assert_match /bundle add pnmx/, output
       assert_match /bundle binstubs pnmx/, output
       assert_match /Created binstub file in bin\/pnmx/, output

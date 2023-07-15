@@ -1,8 +1,8 @@
 class Pnmx::Cli::Registry < Pnmx::Cli::Base
   desc "login", "Log in to registry locally and remotely"
   def login
-    run_locally    { execute *MRSK.registry.login }
-    on(MRSK.hosts) { execute *MRSK.registry.login }
+    run_locally    { execute *PNMX.registry.login }
+    on(PNMX.hosts) { execute *PNMX.registry.login }
   # FIXME: This rescue needed?
   rescue ArgumentError => e
     puts e.message
@@ -10,7 +10,7 @@ class Pnmx::Cli::Registry < Pnmx::Cli::Base
 
   desc "logout", "Log out of registry remotely"
   def logout
-    on(MRSK.hosts) { execute *MRSK.registry.logout }
+    on(PNMX.hosts) { execute *PNMX.registry.logout }
   # FIXME: This rescue needed?
   rescue ArgumentError => e
     puts e.message

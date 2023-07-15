@@ -6,14 +6,14 @@ class Pnmx::Utils::HealthcheckPoller
   class << self
     def wait_for_healthy(pause_after_ready: false, &block)
       attempt = 1
-      max_attempts = MRSK.config.healthcheck["max_attempts"]
+      max_attempts = PNMX.config.healthcheck["max_attempts"]
 
       begin
         case status = block.call
         when "healthy"
           sleep TRAEFIK_HEALTHY_DELAY if pause_after_ready
         when "running" # No health check configured
-          sleep MRSK.config.readiness_delay if pause_after_ready
+          sleep PNMX.config.readiness_delay if pause_after_ready
         else
           raise HealthcheckError, "container not ready (#{status})"
         end

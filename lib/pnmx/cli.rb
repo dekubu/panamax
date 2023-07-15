@@ -4,4 +4,4 @@ module Pnmx::Cli
 end
 
 # SSHKit uses instance eval, so we need a global const for ergonomics
-MRSK = Pnmx::Commander.new
+PNMX = Pnmx::Commander.new

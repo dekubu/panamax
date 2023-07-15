@@ -19,13 +19,13 @@ class Pnmx::Cli::Build < Pnmx::Cli::Base
 
       run_locally do
         begin
-          MRSK.with_verbosity(:debug) { execute *MRSK.builder.push }
+          PNMX.with_verbosity(:debug) { execute *PNMX.builder.push }
         rescue SSHKit::Command::Failed => e
           if e.message =~ /(no builder)|(no such file or directory)/
             error "Missing compatible builder, so creating a new one first"
 
             if cli.create
-              MRSK.with_verbosity(:debug) { execute *MRSK.builder.push }
+              PNMX.with_verbosity(:debug) { execute *PNMX.builder.push }
             end
           else
             raise
@@ -38,10 +38,10 @@ class Pnmx::Cli::Build < Pnmx::Cli::Base
   desc "pull", "Pull app image from registry onto servers"
   def pull
     mutating do
-      on(MRSK.hosts) do
-        execute *MRSK.auditor.record("Pulled image with version #{MRSK.config.version}"), verbosity: :debug
-        execute *MRSK.builder.clean, raise_on_non_zero_exit: false
-        execute *MRSK.builder.pull
+      on(PNMX.hosts) do
+        execute *PNMX.auditor.record("Pulled image with version #{PNMX.config.version}"), verbosity: :debug
+        execute *PNMX.builder.clean, raise_on_non_zero_exit: false
+        execute *PNMX.builder.pull
       end
     end
   end
@@ -51,8 +51,8 @@ class Pnmx::Cli::Build < Pnmx::Cli::Base
     mutating do
       run_locally do
         begin
-          debug "Using builder: #{MRSK.builder.name}"
-          execute *MRSK.builder.create
+          debug "Using builder: #{PNMX.builder.name}"
+          execute *PNMX.builder.create
         rescue SSHKit::Command::Failed => e
           if e.message =~ /stderr=(.*)/
             error "Couldn't create remote builder: #{$1}"
@@ -69,8 +69,8 @@ class Pnmx::Cli::Build < Pnmx::Cli::Base
   def remove
     mutating do
       run_locally do
-        debug "Using builder: #{MRSK.builder.name}"
-        execute *MRSK.builder.remove
+        debug "Using builder: #{PNMX.builder.name}"
+        execute *PNMX.builder.remove
       end
     end
   end
@@ -78,8 +78,8 @@ class Pnmx::Cli::Build < Pnmx::Cli::Base
   desc "details", "Show build setup"
   def details
     run_locally do
-      puts "Builder: #{MRSK.builder.name}"
-      puts capture(*MRSK.builder.info)
+      puts "Builder: #{PNMX.builder.name}"
+      puts capture(*PNMX.builder.info)
     end
   end
 
@@ -87,7 +87,7 @@ class Pnmx::Cli::Build < Pnmx::Cli::Base
     def verify_local_dependencies
       run_locally do
         begin
-          execute *MRSK.builder.ensure_local_dependencies_installed
+          execute *PNMX.builder.ensure_local_dependencies_installed
         rescue SSHKit::Command::Failed => e
           build_error = e.message =~ /command not found/ ?
             "Docker is not installed locally" :

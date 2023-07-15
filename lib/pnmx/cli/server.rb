@@ -1,13 +1,13 @@
 class Pnmx::Cli::Server < Pnmx::Cli::Base
-  desc "bootstrap", "Set up Docker to run MRSK apps"
+  desc "bootstrap", "Set up Docker to run PNMX apps"
   def bootstrap
     missing = []
 
-    on(MRSK.hosts | MRSK.accessory_hosts) do |host|
-      unless execute(*MRSK.docker.installed?, raise_on_non_zero_exit: false)
-        if execute(*MRSK.docker.superuser?, raise_on_non_zero_exit: false)
+    on(PNMX.hosts | PNMX.accessory_hosts) do |host|
+      unless execute(*PNMX.docker.installed?, raise_on_non_zero_exit: false)
+        if execute(*PNMX.docker.superuser?, raise_on_non_zero_exit: false)
           info "Missing Docker on #{host}. Installing…"
-          execute *MRSK.docker.install
+          execute *PNMX.docker.install
         else
           missing << host
         end

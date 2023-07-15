@@ -11,7 +11,7 @@ class CliAppTest < CliTestCase
   end
 
   test "boot will rename if same version is already running" do
-    run_command("details") # Preheat MRSK const
+    run_command("details") # Preheat PNMX const
 
     SSHKit::Backend::Abstract.any_instance.expects(:capture_with_info)
       .with(:docker, :container, :ls, "--filter", "name=^app-web-latest$", "--quiet", raise_on_non_zero_exit: false)
@@ -50,11 +50,11 @@ class CliAppTest < CliTestCase
 
     Pnmx::Cli::App.any_instance.expects(:using_version).raises(RuntimeError)
 
-    assert !MRSK.holding_lock?
+    assert !PNMX.holding_lock?
     assert_raises(RuntimeError) do
       stderred { run_command("boot") }
     end
-    assert MRSK.holding_lock?
+    assert PNMX.holding_lock?
   end
 
   test "start" do

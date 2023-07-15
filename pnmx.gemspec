@@ -3,10 +3,10 @@ require_relative "lib/pnmx/version"
 Gem::Specification.new do |spec|
   spec.name        = "pnmx"
   spec.version     = Pnmx::VERSION
-  spec.authors     = [ "David Heinemeier Hansson" ]
-  spec.email       = "dhh@hey.com"
-  spec.homepage    = "https://github.com/rails/pnmx"
-  spec.summary     = "Deploy web apps in containers to servers running Docker with zero downtime."
+  spec.authors     = [ "Delaney Burke" ]
+  spec.email       = "delaney@zero2one.ee"
+  spec.homepage    = "https://github.com/cococoder/pnmx"
+  spec.summary     = "Deploy web apps in containers to lxd containers running Docker with zero downtime"
   spec.license     = "MIT"
 
   spec.files = Dir["lib/**/*", "MIT-LICENSE", "README.md"]

@@ -2,7 +2,7 @@ class Pnmx::Cli::Lock < Pnmx::Cli::Base
   desc "status", "Report lock status"
   def status
     handle_missing_lock do
-      on(MRSK.primary_host) { puts capture_with_debug(*MRSK.lock.status) }
+      on(PNMX.primary_host) { puts capture_with_debug(*PNMX.lock.status) }
     end
   end
 
@@ -11,7 +11,7 @@ class Pnmx::Cli::Lock < Pnmx::Cli::Base
   def acquire
     message = options[:message]
     raise_if_locked do
-      on(MRSK.primary_host) { execute *MRSK.lock.acquire(message, MRSK.config.version), verbosity: :debug }
+      on(PNMX.primary_host) { execute *PNMX.lock.acquire(message, PNMX.config.version), verbosity: :debug }
       say "Acquired the deploy lock"
     end
   end
@@ -19,7 +19,7 @@ class Pnmx::Cli::Lock < Pnmx::Cli::Base
   desc "release", "Release the deploy lock"
   def release
     handle_missing_lock do
-      on(MRSK.primary_host) { execute *MRSK.lock.release, verbosity: :debug }
+      on(PNMX.primary_host) { execute *PNMX.lock.release, verbosity: :debug }
       say "Released the deploy lock"
     end
   end

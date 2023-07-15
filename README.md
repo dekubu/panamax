@@ -1,16 +1,16 @@
-# MRSK
+# PNMX
 
-MRSK deploys web apps anywhere from bare metal to cloud VMs using Docker with zero downtime. It uses the dynamic reverse-proxy Traefik to hold requests while the new application container is started and the old one is stopped. It works seamlessly across multiple hosts, using SSHKit to execute commands. It was built for Rails applications, but works with any type of web app that can be containerized with Docker.
+PNMX deploys web apps anywhere from bare metal to cloud VMs using Docker with zero downtime. It uses the dynamic reverse-proxy Traefik to hold requests while the new application container is started and the old one is stopped. It works seamlessly across multiple hosts, using SSHKit to execute commands. It was built for Rails applications, but works with any type of web app that can be containerized with Docker.
 
 Watch the screencast: https://www.youtube.com/watch?v=LL1cV2FXZ5I
 
 Join us on Discord: https://discord.gg/YgHVT7GCXS
 
-Ask questions: https://github.com/mrsked/pnmx/discussions
+Ask questions: https://github.com/cococoder/pnmx/discussions
 
 ## Installation
 
-If you have a Ruby environment available, you can install MRSK globally with:
+If you have a Ruby environment available, you can install PNMX globally with:
 
 ```sh
 gem install pnmx
@@ -19,7 +19,7 @@ gem install pnmx
 ...otherwise, you can run a dockerized version via an alias (add this to your .bashrc or similar to simplify re-use):
 
 ```sh
-alias pnmx='docker run --rm -it -v $HOME/.ssh:/root/.ssh -v /var/run/docker.sock:/var/run/docker.sock -v ${PWD}/:/workdir  ghcr.io/mrsked/pnmx'
+alias pnmx='docker run --rm -it -v $HOME/.ssh:/root/.ssh -v /var/run/docker.sock:/var/run/docker.sock -v ${PWD}/:/workdir  ghcr.io/cococoder/pnmx'
 ```
 
 Then, inside your app directory, run `pnmx init` (or `pnmx init --bundle` within Rails 7+ apps where you want a bin/pnmx binstub). Now edit the new file `config/deploy.yml`. It could look as simple as this:
@@ -67,37 +67,37 @@ Voila! All the servers are now serving the app on port 80. If you're just runnin
 
 In the past decade+, there's been an explosion in commercial offerings that make deploying web apps easier. Heroku kicked it off with an incredible offering that stayed ahead of the competition seemingly forever. These days we have excellent alternatives like Fly.io and Render. And hosted Kubernetes is making things easier too on AWS, GCP, Digital Ocean, and elsewhere. But these are all offerings that have you renting computers in the cloud at a premium. If you want to run on your own hardware, or even just have a clear migration path to do so in the future, you need to carefully consider how locked in you get to these commercial platforms. Preferably before the bills swallow your business whole!
 
-MRSK seeks to bring the advance in ergonomics pioneered by these commercial offerings to deploying web apps anywhere. Whether that's low-cost cloud options without the managed-service markup from the likes of Digital Ocean, Hetzner, OVH, etc., or it's your own colocated bare metal. To MRSK, it's all the same. Feed the config file a list of IP addresses with vanilla Ubuntu servers that have seen no prep beyond an added SSH key, and you'll be running in literally minutes.
+PNMX seeks to bring the advance in ergonomics pioneered by these commercial offerings to deploying web apps anywhere. Whether that's low-cost cloud options without the managed-service markup from the likes of Digital Ocean, Hetzner, OVH, etc., or it's your own colocated bare metal. To PNMX, it's all the same. Feed the config file a list of IP addresses with vanilla Ubuntu servers that have seen no prep beyond an added SSH key, and you'll be running in literally minutes.
 
 This approach gives you enormous portability. You can have your web app deployed on several clouds at ease like this. Or you can buy the baseline with your own hardware, then deploy to a cloud before a big seasonal spike to get more capacity. When you're not locked into a single provider from a tooling perspective, there are a lot of compelling options available.
 
-Ultimately, MRSK is meant to compress the complexity of going to production using open source tooling that isn't tied to any commercial offering. Not to zero, mind you. You're probably still better off with a fully managed service if basic Linux or Docker is still difficult, but as soon as those concepts are familiar, you'll be ready to go with MRSK.
+Ultimately, PNMX is meant to compress the complexity of going to production using open source tooling that isn't tied to any commercial offering. Not to zero, mind you. You're probably still better off with a fully managed service if basic Linux or Docker is still difficult, but as soon as those concepts are familiar, you'll be ready to go with PNMX.
 
 ## Why not just run Capistrano, Kubernetes or Docker Swarm?
 
-MRSK basically is Capistrano for Containers, without the need to carefully prepare servers in advance. No need to ensure that the servers have just the right version of Ruby or other dependencies you need. That all lives in the Docker image now. You can boot a brand new Ubuntu (or whatever) server, add it to the list of servers in MRSK, and it'll be auto-provisioned with Docker, and run right away. Docker's layer caching also speeds up deployments with less mucking about on the server. And the images built for MRSK can be used for CI or later introspection.
+PNMX basically is Capistrano for Containers, without the need to carefully prepare servers in advance. No need to ensure that the servers have just the right version of Ruby or other dependencies you need. That all lives in the Docker image now. You can boot a brand new Ubuntu (or whatever) server, add it to the list of servers in PNMX, and it'll be auto-provisioned with Docker, and run right away. Docker's layer caching also speeds up deployments with less mucking about on the server. And the images built for PNMX can be used for CI or later introspection.
 
-Kubernetes is a beast. Running it yourself on your own hardware is not for the faint of heart. It's a fine option if you want to run on someone else's platform, either transparently [like Render](https://thenewstack.io/render-cloud-deployment-with-less-engineering/) or explicitly on AWS/GCP, but if you'd like the freedom to move between cloud and your own hardware, or even mix the two, MRSK is much simpler. You can see everything that's going on, it's just basic Docker commands being called.
+Kubernetes is a beast. Running it yourself on your own hardware is not for the faint of heart. It's a fine option if you want to run on someone else's platform, either transparently [like Render](https://thenewstack.io/render-cloud-deployment-with-less-engineering/) or explicitly on AWS/GCP, but if you'd like the freedom to move between cloud and your own hardware, or even mix the two, PNMX is much simpler. You can see everything that's going on, it's just basic Docker commands being called.
 
-Docker Swarm is much simpler than Kubernetes, but it's still built on the same declarative model that uses state reconciliation. MRSK is intentionally designed around imperative commands, like Capistrano.
+Docker Swarm is much simpler than Kubernetes, but it's still built on the same declarative model that uses state reconciliation. PNMX is intentionally designed around imperative commands, like Capistrano.
 
 Ultimately, there are a myriad of ways to deploy web apps, but this is the toolkit we're using at [37signals](https://37signals.com) to bring [HEY](https://www.hey.com) [home from the cloud](https://world.hey.com/dhh/why-we-re-leaving-the-cloud-654b47e0) without losing the advantages of modern containerization tooling.
 
-## Running MRSK from Docker
+## Running PNMX from Docker
 
-MRSK is packaged up in a Docker container similarly to [rails/docked](https://github.com/rails/docked). This will allow you to run MRSK (from your application directory) without having to install any dependencies other than Docker. Add the following alias to your profile configuration to make working with the container more convenient:
+PNMX is packaged up in a Docker container similarly to [rails/docked](https://github.com/rails/docked). This will allow you to run PNMX (from your application directory) without having to install any dependencies other than Docker. Add the following alias to your profile configuration to make working with the container more convenient:
 
 ```bash
-alias pnmx="docker run -it --rm -v '${PWD}:/workdir' -v '${SSH_AUTH_SOCK}:/ssh-agent' -v /var/run/docker.sock:/var/run/docker.sock -e 'SSH_AUTH_SOCK=/ssh-agent' ghcr.io/mrsked/pnmx:latest"
+alias pnmx="docker run -it --rm -v '${PWD}:/workdir' -v '${SSH_AUTH_SOCK}:/ssh-agent' -v /var/run/docker.sock:/var/run/docker.sock -e 'SSH_AUTH_SOCK=/ssh-agent' ghcr.io/cococoder/pnmx:latest"
 ```
 
-Since MRSK uses SSH to establish a remote connection, it will need access to your SSH agent. The above command uses a volume mount to make it available inside the container and configures the SSH agent inside the container to make use of it.
+Since PNMX uses SSH to establish a remote connection, it will need access to your SSH agent. The above command uses a volume mount to make it available inside the container and configures the SSH agent inside the container to make use of it.
 
 ## Configuration
 
 ### Using .env file to load required environment variables
 
-MRSK uses [dotenv](https://github.com/bkeepers/dotenv) to automatically load environment variables set in the `.env` file present in the application root. This file can be used to set variables like `MRSK_REGISTRY_PASSWORD` or database passwords. But for this reason you must ensure that .env files are not checked into Git or included in your Dockerfile! The format is just key-value like:
+PNMX uses [dotenv](https://github.com/bkeepers/dotenv) to automatically load environment variables set in the `.env` file present in the application root. This file can be used to set variables like `MRSK_REGISTRY_PASSWORD` or database passwords. But for this reason you must ensure that .env files are not checked into Git or included in your Dockerfile! The format is just key-value like:
 
 ```bash
 MRSK_REGISTRY_PASSWORD=pw
@@ -184,7 +184,7 @@ registry:
     - DOCKER_REGISTRY_TOKEN
 ```
 
-A reference to secret `DOCKER_REGISTRY_TOKEN` will look for `ENV["DOCKER_REGISTRY_TOKEN"]` on the machine running MRSK.
+A reference to secret `DOCKER_REGISTRY_TOKEN` will look for `ENV["DOCKER_REGISTRY_TOKEN"]` on the machine running PNMX.
 
 #### Using AWS ECR as the container registry
 
@@ -208,7 +208,7 @@ ssh:
   user: app
 ```
 
-If you are using non-root user (`app` as above example), you need to bootstrap your servers manually, before using them with MRSK. On Ubuntu, you'd do:
+If you are using non-root user (`app` as above example), you need to bootstrap your servers manually, before using them with PNMX. On Ubuntu, you'd do:
 
 ```bash
 sudo apt update
@@ -264,11 +264,11 @@ env:
     - REDIS_PASSWORD
 ```
 
-The list of secret env variables will be expanded at run time from your local machine. So a reference to a secret `DATABASE_PASSWORD` will look for `ENV["DATABASE_PASSWORD"]` on the machine running MRSK. Just like with build secrets.
+The list of secret env variables will be expanded at run time from your local machine. So a reference to a secret `DATABASE_PASSWORD` will look for `ENV["DATABASE_PASSWORD"]` on the machine running PNMX. Just like with build secrets.
 
 If the referenced secret ENVs are missing, the configuration will be halted with a `KeyError` exception.
 
-Note: Marking an ENV as secret currently only redacts its value in the output for MRSK. The ENV is still injected in the clear into the container at runtime.
+Note: Marking an ENV as secret currently only redacts its value in the output for PNMX. The ENV is still injected in the clear into the container at runtime.
 
 ### Using volumes
 
@@ -279,7 +279,7 @@ volumes:
   - "/local/path:/container/path"
 ```
 
-### MRSK env variables
+### PNMX env variables
 
 The following env variables are set when your container runs:
 
@@ -384,7 +384,7 @@ That'll start the job containers with `docker run ... --cap-add --cpu-count 4 ..
 
 ### Setting a minimum version
 
-You can set the minimum MRSK version with:
+You can set the minimum PNMX version with:
 
 ```yaml
 minimum_version: 0.13.3
@@ -417,7 +417,7 @@ stop_wait_time: 30
 
 ### Using remote builder for native multi-arch
 
-If you're developing on ARM64 (like Apple Silicon), but you want to deploy on AMD64 (x86 64-bit), you can use multi-architecture images. By default, MRSK will setup a local buildx configuration that does this through QEMU emulation. But this can be quite slow, especially on the first build.
+If you're developing on ARM64 (like Apple Silicon), but you want to deploy on AMD64 (x86 64-bit), you can use multi-architecture images. By default, PNMX will setup a local buildx configuration that does this through QEMU emulation. But this can be quite slow, especially on the first build.
 
 If you want to speed up this process by using a remote AMD64 host to natively build the AMD64 part of the image, while natively building the ARM64 part locally, you can do so using builder options:
 
@@ -453,7 +453,7 @@ builder:
   multiarch: false
 ```
 
-This is also a good option if you're running MRSK from a CI server that shares architecture with the deployment servers.
+This is also a good option if you're running PNMX from a CI server that shares architecture with the deployment servers.
 
 ### Using a different Dockerfile or context when building
 
@@ -477,7 +477,7 @@ builder:
 
 ### Using multistage builder cache
 
-Docker multistage build cache can singlehandedly speed up your builds by a lot. Currently MRSK only supports using the GHA cache or the Registry cache:
+Docker multistage build cache can singlehandedly speed up your builds by a lot. Currently PNMX only supports using the GHA cache or the Registry cache:
 
 ```yaml
 # Using GHA cache
@@ -553,7 +553,7 @@ traefik:
 
 ### Traefik version, upgrades, and custom images
 
-MRSK runs the traefik:v2.9 image to track Traefik 2.9.x releases.
+PNMX runs the traefik:v2.9 image to track Traefik 2.9.x releases.
 
 To pin Traefik to a specific version or an image published to your registry,
 specify `image`:
@@ -567,7 +567,7 @@ This is useful for downgrading Traefik if there's an unexpected breaking
 change in a minor version release, upgrading Traefik to test forthcoming
 releases, or running your own Traefik-derived image.
 
-MRSK has not been tested for compatibility with Traefik 3 betas. Please do!
+PNMX has not been tested for compatibility with Traefik 3 betas. Please do!
 
 ### Traefik container configuration
 
@@ -643,7 +643,7 @@ FROM ruby:$RUBY_VERSION-slim as base
 
 ### Using accessories for database, cache, search services
 
-You can manage your accessory services via MRSK as well. Accessories are long-lived services that your app depends on. They are not updated when you deploy.
+You can manage your accessory services via PNMX as well. Accessories are long-lived services that your app depends on. They are not updated when you deploy.
 
 ```yaml
 accessories:
@@ -713,7 +713,7 @@ This assumes the Cron settings are stored in `config/crontab`.
 
 ### Healthcheck
 
-MRSK uses Docker healthchecks to check the health of your application during deployment. Traefik uses this same healthcheck status to determine when a container is ready to receive traffic.
+PNMX uses Docker healthchecks to check the health of your application during deployment. Traefik uses this same healthcheck status to determine when a container is ready to receive traffic.
 
 The healthcheck defaults to testing the HTTP response to the path `/up` on port 3000, up to 7 times. You can tailor this behaviour with the `healthcheck` setting:
 
@@ -725,7 +725,7 @@ healthcheck:
   interval: 20s
 ```
 
-This will ensure your application is configured with a traefik label for the healthcheck against `/healthz` and that the pre-deploy healthcheck that MRSK performs is done against the same path on port 4000.
+This will ensure your application is configured with a traefik label for the healthcheck against `/healthz` and that the pre-deploy healthcheck that PNMX performs is done against the same path on port 4000.
 
 You can also specify a custom healthcheck command, which is useful for non-HTTP services:
 
@@ -894,7 +894,7 @@ pnmx lock release
 
 When deploying to large numbers of hosts, you might prefer not to restart your services on every host at the same time.
 
-MRSK's default is to boot new containers on all hosts in parallel. But you can control this by configuring `boot/limit` and `boot/wait` as options:
+PNMX's default is to boot new containers on all hosts in parallel. But you can control this by configuring `boot/limit` and `boot/wait` as options:
 
 ```yaml
 service: myservice
@@ -904,9 +904,9 @@ boot:
   wait: 2
 ```
 
-When `limit` is specified, containers will be booted on, at most, `limit` hosts at once. MRSK will pause for `wait` seconds between batches.
+When `limit` is specified, containers will be booted on, at most, `limit` hosts at once. PNMX will pause for `wait` seconds between batches.
 
-These settings only apply when booting containers (using `pnmx deploy`, or `pnmx app boot`). For other commands, MRSK continues to run commands in parallel across all hosts.
+These settings only apply when booting containers (using `pnmx deploy`, or `pnmx app boot`). For other commands, PNMX continues to run commands in parallel across all hosts.
 
 ## Hooks
 
@@ -968,4 +968,4 @@ This is beta software. Commands may still move around. But we're live in product
 
 ## License
 
-MRSK is released under the [MIT License](https://opensource.org/licenses/MIT).
+PNMX is released under the [MIT License](https://opensource.org/licenses/MIT).

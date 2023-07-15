@@ -10,10 +10,10 @@ class Pnmx::Cli::Prune < Pnmx::Cli::Base
   desc "images", "Prune dangling images"
   def images
     mutating do
-      on(MRSK.hosts) do
-        execute *MRSK.auditor.record("Pruned images"), verbosity: :debug
-        execute *MRSK.prune.dangling_images
-        execute *MRSK.prune.tagged_images
+      on(PNMX.hosts) do
+        execute *PNMX.auditor.record("Pruned images"), verbosity: :debug
+        execute *PNMX.prune.dangling_images
+        execute *PNMX.prune.tagged_images
       end
     end
   end
@@ -21,9 +21,9 @@ class Pnmx::Cli::Prune < Pnmx::Cli::Base
   desc "containers", "Prune all stopped containers, except the last 5"
   def containers
     mutating do
-      on(MRSK.hosts) do
-        execute *MRSK.auditor.record("Pruned containers"), verbosity: :debug
-        execute *MRSK.prune.containers
+      on(PNMX.hosts) do
+        execute *PNMX.auditor.record("Pruned containers"), verbosity: :debug
+        execute *PNMX.prune.containers
       end
     end
   end

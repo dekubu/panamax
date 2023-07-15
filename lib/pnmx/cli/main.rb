@@ -86,7 +86,7 @@ class Pnmx::Cli::Main < Pnmx::Cli::Base
       mutating do
         invoke_options = deploy_options
 
-        MRSK.config.version = version
+        PNMX.config.version = version
         old_version = nil
 
         if container_available?(version)
@@ -112,20 +112,20 @@ class Pnmx::Cli::Main < Pnmx::Cli::Base
 
   desc "audit", "Show audit log from servers"
   def audit
-    on(MRSK.hosts) do |host|
-      puts_by_host host, capture_with_info(*MRSK.auditor.reveal)
+    on(PNMX.hosts) do |host|
+      puts_by_host host, capture_with_info(*PNMX.auditor.reveal)
     end
   end
 
   desc "config", "Show combined config (including secrets!)"
   def config
     run_locally do
-      puts Pnmx::Utils.redacted(MRSK.config.to_h).to_yaml
+      puts Pnmx::Utils.redacted(PNMX.config.to_h).to_yaml
     end
   end
 
   desc "init", "Create config stub in config/deploy.yml and env stub in .env"
-  option :bundle, type: :boolean, default: false, desc: "Add MRSK to the Gemfile and create a bin/pnmx binstub"
+  option :bundle, type: :boolean, default: false, desc: "Add PNMX to the Gemfile and create a bin/pnmx binstub"
   def init
     require "fileutils"
 
@@ -154,7 +154,7 @@ class Pnmx::Cli::Main < Pnmx::Cli::Base
       if (binstub = Pathname.new(File.expand_path("bin/pnmx"))).exist?
         puts "Binstub already exists in bin/pnmx (remove first to create a new one)"
       else
-        puts "Adding MRSK to Gemfile and bundle..."
+        puts "Adding PNMX to Gemfile and bundle..."
         run_locally do
           execute :bundle, :add, :pnmx
           execute :bundle, :binstubs, :pnmx
@@ -190,7 +190,7 @@ class Pnmx::Cli::Main < Pnmx::Cli::Base
     end
   end
 
-  desc "version", "Show MRSK version"
+  desc "version", "Show PNMX version"
   def version
     puts Pnmx::VERSION
   end
@@ -225,9 +225,9 @@ class Pnmx::Cli::Main < Pnmx::Cli::Base
   private
     def container_available?(version)
       begin
-        on(MRSK.hosts) do
-          MRSK.roles_on(host).each do |role|
-            container_id = capture_with_info(*MRSK.app(role: role).container_id_for_version(version))
+        on(PNMX.hosts) do
+          PNMX.roles_on(host).each do |role|
+            container_id = capture_with_info(*PNMX.app(role: role).container_id_for_version(version))
             raise "Container not found" unless container_id.present?
           end
         end
@@ -244,6 +244,6 @@ class Pnmx::Cli::Main < Pnmx::Cli::Base
     end
 
     def deploy_options
-      { "version" => MRSK.config.version }.merge(options.without("skip_push"))
+      { "version" => PNMX.config.version }.merge(options.without("skip_push"))
     end
 end

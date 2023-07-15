@@ -3,15 +3,15 @@ class Pnmx::Cli::Accessory < Pnmx::Cli::Base
   def boot(name)
     mutating do
       if name == "all"
-        MRSK.accessory_names.each { |accessory_name| boot(accessory_name) }
+        PNMX.accessory_names.each { |accessory_name| boot(accessory_name) }
       else
         with_accessory(name) do |accessory|
           directories(name)
           upload(name)
 
           on(accessory.hosts) do
-            execute *MRSK.registry.login
-            execute *MRSK.auditor.record("Booted #{name} accessory"), verbosity: :debug
+            execute *PNMX.registry.login
+            execute *PNMX.auditor.record("Booted #{name} accessory"), verbosity: :debug
             execute *accessory.run
           end
         end
@@ -65,7 +65,7 @@ class Pnmx::Cli::Accessory < Pnmx::Cli::Base
     mutating do
       with_accessory(name) do |accessory|
         on(accessory.hosts) do
-          execute *MRSK.auditor.record("Started #{name} accessory"), verbosity: :debug
+          execute *PNMX.auditor.record("Started #{name} accessory"), verbosity: :debug
           execute *accessory.start
         end
       end
@@ -77,7 +77,7 @@ class Pnmx::Cli::Accessory < Pnmx::Cli::Base
     mutating do
       with_accessory(name) do |accessory|
         on(accessory.hosts) do
-          execute *MRSK.auditor.record("Stopped #{name} accessory"), verbosity: :debug
+          execute *PNMX.auditor.record("Stopped #{name} accessory"), verbosity: :debug
           execute *accessory.stop, raise_on_non_zero_exit: false
         end
       end
@@ -97,7 +97,7 @@ class Pnmx::Cli::Accessory < Pnmx::Cli::Base
   desc "details [NAME]", "Show details about accessory on host (use NAME=all to show all accessories)"
   def details(name)
     if name == "all"
-      MRSK.accessory_names.each { |accessory_name| details(accessory_name) }
+      PNMX.accessory_names.each { |accessory_name| details(accessory_name) }
     else
       with_accessory(name) do |accessory|
         on(accessory.hosts) { puts capture_with_info(*accessory.info) }
@@ -122,14 +122,14 @@ class Pnmx::Cli::Accessory < Pnmx::Cli::Base
       when options[:reuse]
         say "Launching command from existing container...", :magenta
         on(accessory.hosts) do
-          execute *MRSK.auditor.record("Executed cmd '#{cmd}' on #{name} accessory"), verbosity: :debug
+          execute *PNMX.auditor.record("Executed cmd '#{cmd}' on #{name} accessory"), verbosity: :debug
           capture_with_info(*accessory.execute_in_existing_container(cmd))
         end
 
       else
         say "Launching command from new container...", :magenta
         on(accessory.hosts) do
-          execute *MRSK.auditor.record("Executed cmd '#{cmd}' on #{name} accessory"), verbosity: :debug
+          execute *PNMX.auditor.record("Executed cmd '#{cmd}' on #{name} accessory"), verbosity: :debug
           capture_with_info(*accessory.execute_in_new_container(cmd))
         end
       end
@@ -167,7 +167,7 @@ class Pnmx::Cli::Accessory < Pnmx::Cli::Base
   def remove(name)
     mutating do
       if name == "all"
-        MRSK.accessory_names.each { |accessory_name| remove(accessory_name) }
+        PNMX.accessory_names.each { |accessory_name| remove(accessory_name) }
       else
         if options[:confirmed] || ask("This will remove all containers, images and data directories for #{name}. Are you sure?", limited_to: %w( y N ), default: "N") == "y"
           with_accessory(name) do
@@ -186,7 +186,7 @@ class Pnmx::Cli::Accessory < Pnmx::Cli::Base
     mutating do
       with_accessory(name) do |accessory|
         on(accessory.hosts) do
-          execute *MRSK.auditor.record("Remove #{name} accessory container"), verbosity: :debug
+          execute *PNMX.auditor.record("Remove #{name} accessory container"), verbosity: :debug
           execute *accessory.remove_container
         end
       end
@@ -198,7 +198,7 @@ class Pnmx::Cli::Accessory < Pnmx::Cli::Base
     mutating do
       with_accessory(name) do |accessory|
         on(accessory.hosts) do
-          execute *MRSK.auditor.record("Removed #{name} accessory image"), verbosity: :debug
+          execute *PNMX.auditor.record("Removed #{name} accessory image"), verbosity: :debug
           execute *accessory.remove_image
         end
       end
@@ -218,7 +218,7 @@ class Pnmx::Cli::Accessory < Pnmx::Cli::Base
 
   private
     def with_accessory(name)
-      if accessory = MRSK.accessory(name)
+      if accessory = PNMX.accessory(name)
         yield accessory
       else
         error_on_missing_accessory(name)
@@ -226,7 +226,7 @@ class Pnmx::Cli::Accessory < Pnmx::Cli::Base
     end
 
     def error_on_missing_accessory(name)
-      options = MRSK.accessory_names.presence
+      options = PNMX.accessory_names.presence
 
       error \
         "No accessory by the name of '#{name}'" +

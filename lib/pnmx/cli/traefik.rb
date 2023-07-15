@@ -2,9 +2,9 @@ class Pnmx::Cli::Traefik < Pnmx::Cli::Base
   desc "boot", "Boot Traefik on servers"
   def boot
     mutating do
-      on(MRSK.traefik_hosts) do
-        execute *MRSK.registry.login
-        execute *MRSK.traefik.run, raise_on_non_zero_exit: false
+      on(PNMX.traefik_hosts) do
+        execute *PNMX.registry.login
+        execute *PNMX.traefik.run, raise_on_non_zero_exit: false
       end
     end
   end
@@ -21,9 +21,9 @@ class Pnmx::Cli::Traefik < Pnmx::Cli::Base
   desc "start", "Start existing Traefik container on servers"
   def start
     mutating do
-      on(MRSK.traefik_hosts) do
-        execute *MRSK.auditor.record("Started traefik"), verbosity: :debug
-        execute *MRSK.traefik.start, raise_on_non_zero_exit: false
+      on(PNMX.traefik_hosts) do
+        execute *PNMX.auditor.record("Started traefik"), verbosity: :debug
+        execute *PNMX.traefik.start, raise_on_non_zero_exit: false
       end
     end
   end
@@ -31,9 +31,9 @@ class Pnmx::Cli::Traefik < Pnmx::Cli::Base
   desc "stop", "Stop existing Traefik container on servers"
   def stop
     mutating do
-      on(MRSK.traefik_hosts) do
-        execute *MRSK.auditor.record("Stopped traefik"), verbosity: :debug
-        execute *MRSK.traefik.stop, raise_on_non_zero_exit: false
+      on(PNMX.traefik_hosts) do
+        execute *PNMX.auditor.record("Stopped traefik"), verbosity: :debug
+        execute *PNMX.traefik.stop, raise_on_non_zero_exit: false
       end
     end
   end
@@ -48,7 +48,7 @@ class Pnmx::Cli::Traefik < Pnmx::Cli::Base
 
   desc "details", "Show details about Traefik container from servers"
   def details
-    on(MRSK.traefik_hosts) { |host| puts_by_host host, capture_with_info(*MRSK.traefik.info), type: "Traefik" }
+    on(PNMX.traefik_hosts) { |host| puts_by_host host, capture_with_info(*PNMX.traefik.info), type: "Traefik" }
   end
 
   desc "logs", "Show log lines from Traefik on servers"
@@ -61,16 +61,16 @@ class Pnmx::Cli::Traefik < Pnmx::Cli::Base
 
     if options[:follow]
       run_locally do
-        info "Following logs on #{MRSK.primary_host}..."
-        info MRSK.traefik.follow_logs(host: MRSK.primary_host, grep: grep)
-        exec MRSK.traefik.follow_logs(host: MRSK.primary_host, grep: grep)
+        info "Following logs on #{PNMX.primary_host}..."
+        info PNMX.traefik.follow_logs(host: PNMX.primary_host, grep: grep)
+        exec PNMX.traefik.follow_logs(host: PNMX.primary_host, grep: grep)
       end
     else
       since = options[:since]
       lines = options[:lines].presence || ((since || grep) ? nil : 100) # Default to 100 lines if since or grep isn't set
 
-      on(MRSK.traefik_hosts) do |host|
-        puts_by_host host, capture(*MRSK.traefik.logs(since: since, lines: lines, grep: grep)), type: "Traefik"
+      on(PNMX.traefik_hosts) do |host|
+        puts_by_host host, capture(*PNMX.traefik.logs(since: since, lines: lines, grep: grep)), type: "Traefik"
       end
     end
   end
@@ -87,9 +87,9 @@ class Pnmx::Cli::Traefik < Pnmx::Cli::Base
   desc "remove_container", "Remove Traefik container from servers", hide: true
   def remove_container
     mutating do
-      on(MRSK.traefik_hosts) do
-        execute *MRSK.auditor.record("Removed traefik container"), verbosity: :debug
-        execute *MRSK.traefik.remove_container
+      on(PNMX.traefik_hosts) do
+        execute *PNMX.auditor.record("Removed traefik container"), verbosity: :debug
+        execute *PNMX.traefik.remove_container
       end
     end
   end
@@ -97,9 +97,9 @@ class Pnmx::Cli::Traefik < Pnmx::Cli::Base
   desc "remove_image", "Remove Traefik image from servers", hide: true
   def remove_image
     mutating do
-      on(MRSK.traefik_hosts) do
-        execute *MRSK.auditor.record("Removed traefik image"), verbosity: :debug
-        execute *MRSK.traefik.remove_image
+      on(PNMX.traefik_hosts) do
+        execute *PNMX.auditor.record("Removed traefik image"), verbosity: :debug
+        execute *PNMX.traefik.remove_image
       end
     end
   end

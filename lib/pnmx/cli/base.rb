@@ -42,7 +42,7 @@ module Pnmx::Cli
       end
 
       def initialize_commander(options)
-        MRSK.tap do |commander|
+        PNMX.tap do |commander|
           if options[:verbose]
             ENV["VERBOSE"] = "1" # For backtraces via cli/start
             commander.verbosity = :debug
@@ -73,9 +73,9 @@ module Pnmx::Cli
       end
 
       def mutating
-        return yield if MRSK.holding_lock?
+        return yield if PNMX.holding_lock?
 
-        MRSK.config.ensure_env_available
+        PNMX.config.ensure_env_available
 
         run_hook "pre-connect"
 
@@ -84,7 +84,7 @@ module Pnmx::Cli
         begin
           yield
         rescue
-          if MRSK.hold_lock_on_error?
+          if PNMX.hold_lock_on_error?
             error "  \e[31mDeploy lock was not released\e[0m"
           else
             release_lock
@@ -99,24 +99,24 @@ module Pnmx::Cli
       def acquire_lock
         raise_if_locked do
           say "Acquiring the deploy lock...", :magenta
-          on(MRSK.primary_host) { execute *MRSK.lock.acquire("Automatic deploy lock", MRSK.config.version), verbosity: :debug }
+          on(PNMX.primary_host) { execute *PNMX.lock.acquire("Automatic deploy lock", PNMX.config.version), verbosity: :debug }
         end
 
-        MRSK.holding_lock = true
+        PNMX.holding_lock = true
       end
 
       def release_lock
         say "Releasing the deploy lock...", :magenta
-        on(MRSK.primary_host) { execute *MRSK.lock.release, verbosity: :debug }
+        on(PNMX.primary_host) { execute *PNMX.lock.release, verbosity: :debug }
 
-        MRSK.holding_lock = false
+        PNMX.holding_lock = false
       end
 
       def raise_if_locked
         yield
       rescue SSHKit::Runner::ExecuteError => e
         if e.message =~ /cannot create directory/
-          on(MRSK.primary_host) { puts capture_with_debug(*MRSK.lock.status) }
+          on(PNMX.primary_host) { puts capture_with_debug(*PNMX.lock.status) }
           raise LockError, "Deploy lock found"
         else
           raise e
@@ -124,22 +124,22 @@ module Pnmx::Cli
       end
 
       def hold_lock_on_error
-        if MRSK.hold_lock_on_error?
+        if PNMX.hold_lock_on_error?
           yield
         else
-          MRSK.hold_lock_on_error = true
+          PNMX.hold_lock_on_error = true
           yield
-          MRSK.hold_lock_on_error = false
+          PNMX.hold_lock_on_error = false
         end
       end
 
       def run_hook(hook, **extra_details)
-        if !options[:skip_hooks] && MRSK.hook.hook_exists?(hook)
-          details = { hosts: MRSK.hosts.join(","), command: command, subcommand: subcommand }
+        if !options[:skip_hooks] && PNMX.hook.hook_exists?(hook)
+          details = { hosts: PNMX.hosts.join(","), command: command, subcommand: subcommand }
 
           say "Running the #{hook} hook...", :magenta
           run_locally do
-            MRSK.with_verbosity(:debug) { execute *MRSK.hook.run(hook, **details, **extra_details) }
+            PNMX.with_verbosity(:debug) { execute *PNMX.hook.run(hook, **details, **extra_details) }
           rescue SSHKit::Command::Failed
             raise HookError.new("Hook `#{hook}` failed")
           end
