@@ -1,5 +1,6 @@
 require "active_support/duration"
 require "time"
+require "base64"
 
 class Pnmx::Commands::Lock < Pnmx::Commands::Base
   def acquire(message, version)
