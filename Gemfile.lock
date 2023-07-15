@@ -1,13 +1,12 @@
 PATH
   remote: .
   specs:
-    pnmx (0.0.8)
+    pnmx (0.0.9)
       activesupport (>= 7.0)
       bcrypt_pbkdf (~> 1.0)
       dotenv (~> 2.8)
       ed25519 (~> 1.2)
       lxdkit (~> 0.0)
-      net-ssh (~> 7.0)
       thor (~> 1.2)
       zeitwerk (~> 2.5)
 
